@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Meeting Minutes Assistant — App Map</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #F3F8FB;
+      --surface: #FFFFFF;
+      --ink: #16324F;
+      --muted: #4B6275;
+      --line: #708899;
+      --blue: #075985;
+      --blue-soft: #E2F1F8;
+      --gold: #FFF4CC;
+      --gold-ink: #5C3B00;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page);
+      color: var(--ink);
+      font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    main { width: min(1020px, calc(100% - 2rem)); margin: 2rem auto 4rem; }
+    header, section, footer {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+    header { border-top: 6px solid var(--blue); }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin: 0 0 .45rem; font-size: clamp(1.6rem, 3vw, 2.2rem); }
+    h2 { margin-top: 0; font-size: 1.3rem; }
+    h3 { font-size: 1.05rem; margin-bottom: .25rem; }
+    p, li { max-width: 78ch; }
+    code, kbd { font: .92em ui-monospace, SFMono-Regular, Consolas, monospace; }
+    code { background: var(--blue-soft); padding: .08rem .28rem; border-radius: 4px; overflow-wrap: anywhere; }
+    a { color: var(--blue); text-decoration-thickness: .09em; text-underline-offset: .15em; }
+    a:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    .eyebrow { color: var(--muted); font-size: .9rem; font-weight: 650; letter-spacing: .03em; }
+    .diagram-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: #F8FBFD; padding: .5rem; }
+    svg { display: block; min-width: 760px; width: 100%; height: auto; }
+    .node { fill: #FFFFFF; stroke: #075985; stroke-width: 2; rx: 10; }
+    .node-local { fill: #E2F1F8; stroke: #075985; stroke-width: 2; rx: 10; }
+    .node-text { fill: #16324F; font: 700 15px system-ui, sans-serif; text-anchor: middle; }
+    .node-sub { fill: #4B6275; font: 13px system-ui, sans-serif; text-anchor: middle; }
+    .arrow { stroke: #075985; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+    .local-arrow { stroke: #4B6275; stroke-width: 2; stroke-dasharray: 6 5; fill: none; marker-end: url(#arrow-muted); }
+    .callout { background: var(--gold); border-left: 4px solid #806000; padding: .75rem 1rem; color: var(--gold-ink); }
+    .route { display: grid; gap: .75rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+    .route article { border: 1px solid var(--line); border-radius: 8px; padding: .85rem; background: #F8FBFD; }
+    .route h3 { margin-top: 0; }
+    .footer-note { color: var(--muted); font-size: .9rem; }
+    @media (max-width: 560px) {
+      main { width: min(100% - 1rem, 1020px); margin-top: .5rem; }
+      header, section, footer { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">Build With AI · 5-build take-home guide</p>
+    <h1>Meeting Minutes Assistant — App Map</h1>
+    <p>A local Streamlit proof of concept that turns synthetic in-person meeting transcripts, speaker notes, and a chosen format into editable minutes, then exports the edited text.</p>
+    <p><strong>Keep the demo synthetic.</strong> Generate sends meeting materials to Google Gemini. Never use confidential or real meeting records for this unpaid-tier prototype.</p>
+  </header>
+
+  <section aria-labelledby="flow-title">
+    <h2 id="flow-title">One action through the app</h2>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 960 300" role="img" aria-labelledby="diagram-title diagram-desc">
+        <title id="diagram-title">Meeting materials flow through generation, local storage, and export</title>
+        <desc id="diagram-desc">Transcript, speaker notes, and format guidance enter the Streamlit app. The app calls Gemini once, displays editable minutes and attribution warnings, saves the draft and templates locally, and can export edited minutes to DOCX or PDF.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#075985"/></marker>
+          <marker id="arrow-muted" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,6 L9,3 z" fill="#4B6275"/></marker>
+        </defs>
+        <rect class="node" x="15" y="35" width="195" height="88"/>
+        <text class="node-text" x="112" y="66">Meeting materials</text>
+        <text class="node-sub" x="112" y="90">Transcript · notes · format</text>
+        <path class="arrow" d="M210 79 H250"/>
+        <rect class="node" x="255" y="35" width="195" height="88"/>
+        <text class="node-text" x="352" y="66">Streamlit app</text>
+        <text class="node-sub" x="352" y="90">app.py validates &amp; routes</text>
+        <path class="arrow" d="M450 79 H490"/>
+        <rect class="node" x="495" y="35" width="195" height="88"/>
+        <text class="node-text" x="592" y="66">One Gemini request</text>
+        <text class="node-sub" x="592" y="90">One structured call</text>
+        <path class="arrow" d="M690 79 H730"/>
+        <rect class="node" x="735" y="35" width="210" height="88"/>
+        <text class="node-text" x="840" y="66">Review &amp; edit</text>
+        <text class="node-sub" x="840" y="90">Minutes + attribution flags</text>
+        <path class="local-arrow" d="M352 123 V183"/>
+        <rect class="node-local" x="240" y="188" width="225" height="78"/>
+        <text class="node-text" x="352" y="217">Local save / restore</text>
+        <text class="node-sub" x="352" y="240">~/.meeting-minutes-assistant/</text>
+        <path class="local-arrow" d="M840 123 V160 H710 V183"/>
+        <rect class="node-local" x="585" y="188" width="250" height="78"/>
+        <text class="node-text" x="710" y="217">Export latest edits</text>
+        <text class="node-sub" x="710" y="240">DOCX or PDF</text>
+      </svg>
+    </div>
+    <p class="footer-note">Transcript, speaker notes, and selected format reference are sent to Gemini only when Generate is clicked. Drafts and saved templates stay on this computer.</p>
+  </section>
+
+  <section aria-labelledby="route-title">
+    <h2 id="route-title">Reference route through the code</h2>
+    <p>This is a map for finding the implementation; it does not claim the code was toured interactively.</p>
+    <div class="route">
+      <article>
+        <h3>1. Inputs and workflow</h3>
+        <p><code>app.py</code> — find <code>_restore()</code> and the <code>Generate draft minutes</code> button. This is where the app restores the local draft, checks the inputs, chooses a saved template or typed structure, and connects the visible controls.</p>
+      </article>
+      <article>
+        <h3>2. The AI call</h3>
+        <p><code>minutes_app/ai_service.py</code> — find <code>generate_minutes()</code>. It makes one structured Gemini request and returns draft text plus unclear-speaker warnings; it does not guess speaker identities.</p>
+      </article>
+      <article>
+        <h3>3. Files the secretary receives</h3>
+        <p><code>minutes_app/document_export.py</code> — find <code>export_docx()</code> and <code>export_pdf()</code>. The app passes the current edited text to both functions before showing the download buttons.</p>
+      </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="changes-title">
+    <h2 id="changes-title">To change this, start here</h2>
+    <ul>
+      <li>Colors, control contrast, and footer styling: <code>minutes_app/theme.py</code> — <code>HARBOR_LIGHT</code> and <code>theme_css()</code>.</li>
+      <li>What is saved or cleared: <code>app.py</code> — <code>_persist()</code>, <code>_restore()</code>, and <code>_clear_meeting()</code>; then <code>minutes_app/local_store.py</code>.</li>
+      <li>Generation prompt or response fields: <code>minutes_app/ai_service.py</code> — <code>generate_minutes()</code>.</li>
+      <li>DOCX/PDF appearance: <code>minutes_app/document_export.py</code> — <code>export_docx()</code> and <code>export_pdf()</code>.</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="practice-title">
+    <h2 id="practice-title">A practice to reuse</h2>
+    <p>Turn a requirement into something observable, check it with a test, then try it in the running app. Here, the export tests check that the latest edited line appears in both formats, and the learner confirmed that it did. On another project, use the same pattern: define what a user should see, make a check for it, and verify the behavior yourself.</p>
+  </section>
+
+  <section aria-labelledby="run-title">
+    <h2 id="run-title">Run it again</h2>
+    <p>From the project folder, start the virtual environment if needed and run:</p>
+    <p><code>.venv/bin/python -m streamlit run app.py</code></p>
+    <p>Open the local address printed by Streamlit. Live generation needs a locally configured <code>GEMINI_API_KEY</code> in <code>.env</code>; do not put that file in Git or share its contents. For setup details, see <code>README.md</code>.</p>
+    <p class="footer-note">Code snapshot: app implementation commit <code>245678c</code>. This guide is a snapshot and may drift if the code changes. Open this file at <code>devpost/app-map.html</code>.</p>
+  </section>
+</main>
+</body>
+</html>

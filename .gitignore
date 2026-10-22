@@ -1,0 +1,13 @@
+# Personal learning context
+/devpost/learner-profile.md
+
+# Local credentials
+.env
+.env.*
+!.env.example
+
+# Python virtual environment and generated runtime data
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
